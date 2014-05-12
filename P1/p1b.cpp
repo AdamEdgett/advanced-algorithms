@@ -9,11 +9,13 @@
 #include <vector>
 #include <time.h>
 
-#include "d_except.h"
-#include "d_matrix.h"
-#include "graph.h"
+#include "../common/d_except.h"
+#include "../common/d_matrix.h"
+#include "../common/graph.h"
 
 using namespace std;
+
+void exhaustiveColoring(graph g, int numColors, int limit);
 
 int main()
 {
@@ -27,16 +29,16 @@ int main()
    // Read the name of the graph from the keyboard or
    // hard code it here for testing.
    
-   // fileName = "color12-4.input";
+   fileName = "../instances/color/color12-4.input";
 
-   cout << "Enter filename" << endl;
-   cin >> fileName;
+   //cout << "Enter filename" << endl;
+   //cin >> fileName;
    
    fin.open(fileName.c_str());
    if (!fin)
    {
       cerr << "Cannot open " << fileName << endl;
-      exit(1);
+      return 1;
    }
 
    try
@@ -51,15 +53,22 @@ int main()
       cout << g;
 
       exhaustiveColoring(g, numColors, 60);
-      g.printSolution();
+      g.printEdges();
+      g.printNodes();
    }    
    catch (indexRangeError &ex) 
    { 
-      cout << ex.what() << endl; exit(1);
+      cout << ex.what() << endl; 
+      return 1;
    }
    catch (rangeError &ex)
    {
-      cout << ex.what() << endl; exit(1);
+      cout << ex.what() << endl; 
+      return 1;
    }
 }
+    
+void exhaustiveColoring(graph g, int numColors, int limit)
+{
 
+}
