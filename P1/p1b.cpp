@@ -15,9 +15,13 @@
 
 using namespace std;
 
+static time_t t;
+static time_t start;
+static int timeLimit;
 void exhaustiveColoring(graph* g, int numColors, int limit);
 bool recursiveColor(graph* g, int node, int numColors);
 void exhaustiveColoring(graph* g, int numColors, int limit);
+void checkTimeLimit(graph* g);
 
 int main()
 {
@@ -31,10 +35,10 @@ int main()
 	// Read the name of the graph from the keyboard or
 	// hard code it here for testing.
 
-	fileName = "../instances/color/color12-4.input";
+	//fileName = "../instances/color/color12-4.input";
 
-	//cout << "Enter filename" << endl;
-	//cin >> fileName;
+	cout << "Enter filename" << endl;
+	cin >> fileName;
 
 	fin.open(fileName.c_str());
 	if (!fin)
@@ -62,6 +66,11 @@ int main()
 		return 1;
 	}
 	catch (rangeError &ex)
+	{
+		cout << ex.what() << endl; 
+		return 1;
+	}
+	catch (baseException &ex)
 	{
 		cout << ex.what() << endl; 
 		return 1;
@@ -105,6 +114,7 @@ bool recursiveColor(graph* g, int node, int numColors)
 {
 	for(int c = 0; c < numColors; c++)
 	{
+		checkTimeLimit(g);
 		g->getNode(node).setWeight(c);
 		if(isColored(g)){
 			return true;
@@ -129,6 +139,18 @@ bool recursiveColor(graph* g, int node, int numColors)
  */
 void exhaustiveColoring(graph* g, int numColors, int limit)
 {
+	start = time(0);	
+	timeLimit = limit;
 	recursiveColor(g, 0, numColors);
+}
+
+void checkTimeLimit(graph* g)
+{
+	t = time(0);
+	if(t - start > timeLimit)
+	{
+		cout << *g;
+		throw baseException("========== Time expired ==========");
+	}
 }
 
