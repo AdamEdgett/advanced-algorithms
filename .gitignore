@@ -20,5 +20,8 @@
 *.out
 *.app
 
-
+#Vim
 *.swp
+
+#g++
+*.gch
