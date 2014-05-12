@@ -26,6 +26,7 @@ void exhaustiveColoring(graph* g, int numColors, int limit);
 bool recursiveColor(graph* g, int node, int numColors);
 void exhaustiveColoring(graph* g, int numColors, int limit);
 void checkTimeLimit(graph* g);
+void printSolution();
 
 int main(int argc, char** argv)
 {
@@ -84,9 +85,13 @@ int main(int argc, char** argv)
 	catch (baseException &ex)
 	{
 		cout << ex.what() << endl;
-		return 1;
 	}
 
+	printSolution();
+}
+
+void printSolution()
+{
 	cout << "# Conflicts: " << minConflicts << endl;
 	cout << "Best found solution: " << endl;
 	cout << bestFound;
@@ -171,7 +176,6 @@ void checkTimeLimit(graph* g)
 	t = time(0);
 	if(t - start > timeLimit)
 	{
-		cout << *g;
 		throw baseException("========== Time expired ==========");
 	}
 }
