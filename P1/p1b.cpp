@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
 		cout << "Num colors: " << numColors << endl;
 
-		exhaustiveColoring(&g, numColors, 60);
+		exhaustiveColoring(&g, numColors, 60 * 10);
 	}
 	catch (indexRangeError &ex)
 	{
