@@ -18,12 +18,16 @@ using namespace std;
 static time_t t;
 static time_t start;
 static int timeLimit;
+
+static graph bestFound;
+static int minConflicts;
+
 void exhaustiveColoring(graph* g, int numColors, int limit);
 bool recursiveColor(graph* g, int node, int numColors);
 void exhaustiveColoring(graph* g, int numColors, int limit);
 void checkTimeLimit(graph* g);
 
-int main()
+int main(int argc, char** argv)
 {
 	char x;
 	ifstream fin;
@@ -37,9 +41,15 @@ int main()
 
 	//fileName = "../instances/color/color12-4.input";
 
-	cout << "Enter filename" << endl;
-	cin >> fileName;
-
+	if(argc == 2)
+	{
+		fileName = argv[1];
+	}
+	else
+	{
+		cout << "Enter filename" << endl;
+		cin >> fileName;
+	}
 	fin.open(fileName.c_str());
 	if (!fin)
 	{
@@ -54,11 +64,12 @@ int main()
 
 		cout << "Reading graph" << endl;
 		graph g(fin);
+		bestFound = g;
+		minConflicts = g.numEdges();
 
 		cout << "Num colors: " << numColors << endl;
 
 		exhaustiveColoring(&g, numColors, 60);
-		cout << g;
 	}
 	catch (indexRangeError &ex)
 	{
@@ -75,14 +86,19 @@ int main()
 		cout << ex.what() << endl;
 		return 1;
 	}
+
+	cout << "# Conflicts: " << minConflicts << endl;
+	cout << "Best found solution: " << endl;
+	cout << bestFound;
 }
 
 /**
  * Check if a graph contains a valid coloring
  * @param g Graph instance to check
  */
-bool isColored(graph* g)
+bool checkColored(graph* g)
 {
+	int conflicts = 0;
 	for(int i = 0; i < g->numNodes(); i++)
 	{
 		for(int j = 0; j < g->numNodes(); j++)
@@ -95,13 +111,19 @@ bool isColored(graph* g)
 			{
 				if(g->getNode(i).getWeight() == g->getNode(j).getWeight())
 				{
-					return false;
+					conflicts++;
 				}
 			}
 		}
 	}
 
-	return true;
+	if(conflicts < minConflicts)
+	{
+		 bestFound = graph(*g);
+		 minConflicts = conflicts;
+	}
+
+	return minConflicts == 0;
 }
 
 /**
@@ -116,7 +138,7 @@ bool recursiveColor(graph* g, int node, int numColors)
 	{
 		checkTimeLimit(g);
 		g->getNode(node).setWeight(c);
-		if(isColored(g)){
+		if(checkColored(g)){
 			return true;
 		}
 		else if((node + 1) < g->numNodes())
