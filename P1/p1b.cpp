@@ -9,9 +9,9 @@
 #include <vector>
 #include <time.h>
 
-#include "../common/d_except.h"
-#include "../common/d_matrix.h"
-#include "../common/graph.h"
+#include "d_except.h"
+#include "d_matrix.h"
+#include "graph.h"
 
 using namespace std;
 
@@ -59,20 +59,20 @@ int main()
 
 		exhaustiveColoring(&g, numColors, 60);
 		cout << g;
-	}    
-	catch (indexRangeError &ex) 
-	{ 
-		cout << ex.what() << endl; 
+	}
+	catch (indexRangeError &ex)
+	{
+		cout << ex.what() << endl;
 		return 1;
 	}
 	catch (rangeError &ex)
 	{
-		cout << ex.what() << endl; 
+		cout << ex.what() << endl;
 		return 1;
 	}
 	catch (baseException &ex)
 	{
-		cout << ex.what() << endl; 
+		cout << ex.what() << endl;
 		return 1;
 	}
 }
@@ -139,7 +139,7 @@ bool recursiveColor(graph* g, int node, int numColors)
  */
 void exhaustiveColoring(graph* g, int numColors, int limit)
 {
-	start = time(0);	
+	start = time(0);
 	timeLimit = limit;
 	recursiveColor(g, 0, numColors);
 }
