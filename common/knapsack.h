@@ -1,6 +1,13 @@
 // Knapsack class
 // Version f08.1
 
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include "d_except.h"
+
+using namespace std;
+
 class knapsack
 {
    public:
@@ -168,7 +175,7 @@ ostream &operator<<(ostream &ostr, vector<bool> v)
    for (int i = 0; i < v.size(); i++)
       cout << v[i] << endl;
 
-   return ostr
+   return ostr;
 }
 
 void knapsack::select(int i)
