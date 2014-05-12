@@ -15,7 +15,9 @@
 
 using namespace std;
 
-void exhaustiveColoring(graph g, int numColors, int limit);
+void exhaustiveColoring(graph* g, int numColors, int limit);
+bool recursiveColor(graph* g, int node, int numColors);
+void exhaustiveColoring(graph* g, int numColors, int limit);
 
 int main()
 {
@@ -50,11 +52,9 @@ int main()
 		graph g(fin);
 
 		cout << "Num colors: " << numColors << endl;
-		cout << g;
 
-		exhaustiveColoring(g, numColors, 60);
-		//g.printEdges();
-		g.printNodes();
+		exhaustiveColoring(&g, numColors, 60);
+		cout << g;
 	}    
 	catch (indexRangeError &ex) 
 	{ 
@@ -68,14 +68,67 @@ int main()
 	}
 }
 
-bool isColored(graph g)
+/**
+ * Check if a graph contains a valid coloring
+ * @param g Graph instance to check
+ */
+bool isColored(graph* g)
 {
+	for(int i = 0; i < g->numNodes(); i++)
+	{
+		for(int j = 0; j < g->numNodes(); j++)
+		{
+			if(i == j)
+			{
+				continue;
+			}
+			if(g->isEdge(i, j))
+			{
+				if(g->getNode(i).getWeight() == g->getNode(j).getWeight())
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Recursively color the graph, brute force approach
+ * @param g Graph instance to color
+ * @param node 0 based index of the node to color
+ * @param numColors Total number of colors to be used in the coloring scheme
+ */
+bool recursiveColor(graph* g, int node, int numColors)
+{
+	for(int c = 0; c < numColors; c++)
+	{
+		g->getNode(node).setWeight(c);
+		if(isColored(g)){
+			return true;
+		}
+		else if((node + 1) < g->numNodes())
+		{
+			if(recursiveColor(g, node + 1, numColors))
+			{
+				return true;
+			}
+		}
+	}
+
 	return false;
 }
 
-void exhaustiveColoring(graph g, int numColors, int limit)
+/**
+ * Brute force color the graph
+ * @param g Graph instance to color
+ * @param node 0 based index of the node to color
+ * @param numColors Total number of colors to be used in the coloring scheme
+ */
+void exhaustiveColoring(graph* g, int numColors, int limit)
 {
-	while(!isColored(g)){
-		
-	}
+	recursiveColor(g, 0, numColors);
 }
+
