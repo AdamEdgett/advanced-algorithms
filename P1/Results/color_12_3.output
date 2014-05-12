@@ -1,0 +1,43 @@
+Reading number of colors
+Reading graph
+Num colors: 3
+# Conflicts: 1
+Best found solution: 
+------------------------------------------------
+Num nodes: 12
+node: 0 weight: 0 visited: 0 marked 0
+node: 1 weight: 1 visited: 0 marked 0
+node: 2 weight: 0 visited: 0 marked 0
+node: 3 weight: 0 visited: 0 marked 0
+node: 4 weight: 0 visited: 0 marked 0
+node: 5 weight: 1 visited: 0 marked 0
+node: 6 weight: 1 visited: 0 marked 0
+node: 7 weight: 2 visited: 0 marked 0
+node: 8 weight: 2 visited: 0 marked 0
+node: 9 weight: 2 visited: 0 marked 0
+node: 10 weight: 1 visited: 0 marked 0
+node: 11 weight: 0 visited: 0 marked 0
+
+Num edges: 0
+edge (0,1):  weight: 0 visited: 0 marked 0
+edge (1,2):  weight: 0 visited: 0 marked 0
+edge (1,4):  weight: 0 visited: 0 marked 0
+edge (1,7):  weight: 0 visited: 0 marked 0
+edge (1,9):  weight: 0 visited: 0 marked 0
+edge (2,3):  weight: 0 visited: 0 marked 0
+edge (2,6):  weight: 0 visited: 0 marked 0
+edge (2,8):  weight: 0 visited: 0 marked 0
+edge (3,5):  weight: 0 visited: 0 marked 0
+edge (3,7):  weight: 0 visited: 0 marked 0
+edge (3,10):  weight: 0 visited: 0 marked 0
+edge (4,5):  weight: 0 visited: 0 marked 0
+edge (4,6):  weight: 0 visited: 0 marked 0
+edge (4,10):  weight: 0 visited: 0 marked 0
+edge (5,8):  weight: 0 visited: 0 marked 0
+edge (5,9):  weight: 0 visited: 0 marked 0
+edge (6,11):  weight: 0 visited: 0 marked 0
+edge (7,11):  weight: 0 visited: 0 marked 0
+edge (8,11):  weight: 0 visited: 0 marked 0
+edge (9,11):  weight: 0 visited: 0 marked 0
+edge (10,11):  weight: 0 visited: 0 marked 0
+
