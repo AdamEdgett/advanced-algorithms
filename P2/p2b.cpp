@@ -164,8 +164,8 @@ void greedyColorNode(graph* g, int current, int numColors)
 		}
 	}
 
-	//99 Otherwise
-	n->setWeight(99);
+	//0 Otherwise
+	n->setWeight(0);
 }
 
 /**
