@@ -2,9 +2,18 @@
 Authors: 	Adam Edgett
 		Matt McDonald
 
-With this project, we attempted to solve NP time-complexity problems with a greedy algorithm. 
+With this project, we attempted to solve NP time-complexity problems with a greedy algorithm.
 
-== Problem 2A - Knapsack == 
+== Problem 2A - Knapsack ==
+For knapsack, our greedy algorithm used the value to cost ratio of each possible object in order to choose the best objects for the knapsack
+The algorithm was greedy because it chose the best value/cost ratio at every step without any look-ahead logic
+
+== Problem 2A - Results ==
+Due to the selection nature of this algorithm over the brute force algorithm, this runs considerably faster than brute force
+Brute force runtime: O(2^n)
+Greedy runtime: O(n)
+But because the greedy algorithm doesn't always make the best overall decision, we don't always end up with the best solution
+
 
 == Problem 2B - Coloring ==
 For coloring, we employed an algorithm that colored nodes in a greedy pattern by investigating its neighbors colors. Essentially, the algorithm is:
@@ -12,7 +21,7 @@ For coloring, we employed an algorithm that colored nodes in a greedy pattern by
 	foreach(node in nodes)
 	{
 		color = findSmallestUnusedColorFromNeighbors();
-		
+
 		if (color not found)
 		{
 			colorNode(0);
@@ -33,7 +42,7 @@ However, if we were to implement a more efficient way to iterate over a node's i
 
 Also relevant, due to the error prone nature of the algorithm, we don't check if the graph is valid until the end of the algorithm, greatly reducing the complexity of the algorithm.
 
-= Problem 2B - Results = 
+== Problem 2B - Results ==
 
 12 	nodes 3 colors : # Conflicts:  2
 12 	nodes 4 colors : # Conflicts:  0
@@ -47,4 +56,4 @@ Also relevant, due to the error prone nature of the algorithm, we don't check if
 96 	nodes 6 colors : # Conflicts:  16
 96 	nodes 7 colors : # Conflicts:  0
 
-As we can see, despite the fact that we chose an error prone algorithm, we can still find a solution with 0 conflicts in the graph in a very reasonable time. We also note that the more colors we have available, the greater chance our algorithm can color the graph successfully without conflicts. In every instance, a smaller number of colors creates conflicts and one or two more colors allow for the entire graph to be colored. This lends to credit that if there is flexibility on the number of colors used in a graph, this greedy algorithm may be of use, but has the potential to create a graph with a large number of colors (depending on the graph structure). 
+As we can see, despite the fact that we chose an error prone algorithm, we can still find a solution with 0 conflicts in the graph in a very reasonable time. We also note that the more colors we have available, the greater chance our algorithm can color the graph successfully without conflicts. In every instance, a smaller number of colors creates conflicts and one or two more colors allow for the entire graph to be colored. This lends to credit that if there is flexibility on the number of colors used in a graph, this greedy algorithm may be of use, but has the potential to create a graph with a large number of colors (depending on the graph structure).
