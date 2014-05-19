@@ -93,7 +93,7 @@ void printSolution()
 {
 	cout << "# Conflicts: " << minConflicts << endl;
 	cout << "Best found solution: " << endl;
-	cout << bestFound;
+	bestFound.printNodes();
 }
 
 /**
