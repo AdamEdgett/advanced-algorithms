@@ -1,5 +1,7 @@
-// Project 2b: Solving graph coloring using greedy search
-//
+/**
+ * Adam Edgett, Matt McDonald
+ * Project 2b: Solving graph coloring using greedy search
+ */
 
 #include <iostream>
 #include <limits.h>
@@ -41,7 +43,7 @@ int main(int argc, char** argv)
 
 	//fileName = "../instances/color/color12-4.input";
 
-	if(argc == 2)
+	if (argc == 2)
 	{
 		fileName = argv[1];
 	}
@@ -87,7 +89,7 @@ int main(int argc, char** argv)
 	}
 
 	printSolution();
-}
+} // end main
 
 void printSolution()
 {
@@ -103,17 +105,17 @@ void printSolution()
 bool checkColored(graph* g)
 {
 	int conflicts = 0;
-	for(int i = 0; i < g->numNodes(); i++)
+	for (int i = 0; i < g->numNodes(); i++)
 	{
-		for(int j = 0; j < g->numNodes(); j++)
+		for (int j = 0; j < g->numNodes(); j++)
 		{
-			if(i == j)
+			if (i == j)
 			{
 				continue;
 			}
-			if(g->isEdge(i, j))
+			if (g->isEdge(i, j))
 			{
-				if(g->getNode(i).getWeight() == g->getNode(j).getWeight())
+				if (g->getNode(i).getWeight() == g->getNode(j).getWeight())
 				{
 					conflicts++;
 				}
@@ -121,14 +123,14 @@ bool checkColored(graph* g)
 		}
 	}
 
-	if(conflicts <= minConflicts)
+	if (conflicts <= minConflicts)
 	{
-		 bestFound = graph(*g);
-		 minConflicts = conflicts;
+		bestFound = graph(*g);
+		minConflicts = conflicts;
 	}
 
 	return minConflicts == 0;
-}
+} // end checkColored
 
 /**
  * Color a node, picking the smallest color that is not present within node's neighbors
@@ -141,23 +143,23 @@ void greedyColorNode(graph* g, int current, int numColors)
 	node* n = &g->getNode(current);
 	int neighborWeight = 0;
 
-	for(int i = 0; i < g->numNodes(); i++)
+	for (int i = 0; i < g->numNodes(); i++)
 	{
-		if(current == i)
+		if (current == i)
 		{
 			continue;
 		}
 
-		if(g->isEdge(current, i) || g->isEdge(i, current))
+		if (g->isEdge(current, i) || g->isEdge(i, current))
 		{
 			neighborWeight |= (1 << g->getNode(i).getWeight());
 		}
 	}
 
 	//Pick lowest color not used in neighbors
-	for(int c = 0; c < numColors; c++)
+	for (int c = 0; c < numColors; c++)
 	{
-		if((neighborWeight & (1 << c)) == 0)
+		if ((neighborWeight & (1 << c)) == 0)
 		{
 			n->setWeight(c);
 			return;
@@ -166,7 +168,7 @@ void greedyColorNode(graph* g, int current, int numColors)
 
 	//0 Otherwise
 	n->setWeight(0);
-}
+} // end greedyColorNode
 
 /**
  * Greedy coloring algorithm where iterate 0->n, for x picking the smallest color that is not present within x's neighbors
@@ -178,13 +180,13 @@ void greedyColoring(graph* g, int numColors, int limit)
 {
 	start = time(0);
 	timeLimit = limit;
-	
-	for(int c = 0; c < g->numNodes(); c++)
+
+	for (int c = 0; c < g->numNodes(); c++)
 	{
 		g->getNode(c).setWeight(numColors + 1);
 	}
 
-	for(int c = 0; c < g->numNodes(); c++)
+	for (int c = 0; c < g->numNodes(); c++)
 	{
 		greedyColorNode(g, c, numColors);
 		checkTimeLimit(g);
@@ -195,7 +197,7 @@ void greedyColoring(graph* g, int numColors, int limit)
 void checkTimeLimit(graph* g)
 {
 	t = time(0);
-	if(t - start > timeLimit)
+	if (t - start > timeLimit)
 	{
 		throw baseException("========== Time expired ==========");
 	}
