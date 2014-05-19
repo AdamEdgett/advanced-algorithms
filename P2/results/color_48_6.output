@@ -1,0 +1,54 @@
+Reading number of colors
+Reading graph
+Num colors: 6
+# Conflicts: 0
+Best found solution: 
+Num nodes: 48
+node: 0 weight: 0 visited: 0 marked 0
+node: 1 weight: 1 visited: 0 marked 0
+node: 2 weight: 0 visited: 0 marked 0
+node: 3 weight: 1 visited: 0 marked 0
+node: 4 weight: 0 visited: 0 marked 0
+node: 5 weight: 2 visited: 0 marked 0
+node: 6 weight: 1 visited: 0 marked 0
+node: 7 weight: 0 visited: 0 marked 0
+node: 8 weight: 1 visited: 0 marked 0
+node: 9 weight: 0 visited: 0 marked 0
+node: 10 weight: 2 visited: 0 marked 0
+node: 11 weight: 3 visited: 0 marked 0
+node: 12 weight: 1 visited: 0 marked 0
+node: 13 weight: 0 visited: 0 marked 0
+node: 14 weight: 1 visited: 0 marked 0
+node: 15 weight: 0 visited: 0 marked 0
+node: 16 weight: 2 visited: 0 marked 0
+node: 17 weight: 1 visited: 0 marked 0
+node: 18 weight: 0 visited: 0 marked 0
+node: 19 weight: 1 visited: 0 marked 0
+node: 20 weight: 0 visited: 0 marked 0
+node: 21 weight: 2 visited: 0 marked 0
+node: 22 weight: 3 visited: 0 marked 0
+node: 23 weight: 4 visited: 0 marked 0
+node: 24 weight: 1 visited: 0 marked 0
+node: 25 weight: 0 visited: 0 marked 0
+node: 26 weight: 1 visited: 0 marked 0
+node: 27 weight: 0 visited: 0 marked 0
+node: 28 weight: 2 visited: 0 marked 0
+node: 29 weight: 1 visited: 0 marked 0
+node: 30 weight: 0 visited: 0 marked 0
+node: 31 weight: 1 visited: 0 marked 0
+node: 32 weight: 0 visited: 0 marked 0
+node: 33 weight: 2 visited: 0 marked 0
+node: 34 weight: 3 visited: 0 marked 0
+node: 35 weight: 1 visited: 0 marked 0
+node: 36 weight: 0 visited: 0 marked 0
+node: 37 weight: 1 visited: 0 marked 0
+node: 38 weight: 0 visited: 0 marked 0
+node: 39 weight: 2 visited: 0 marked 0
+node: 40 weight: 1 visited: 0 marked 0
+node: 41 weight: 0 visited: 0 marked 0
+node: 42 weight: 1 visited: 0 marked 0
+node: 43 weight: 0 visited: 0 marked 0
+node: 44 weight: 2 visited: 0 marked 0
+node: 45 weight: 3 visited: 0 marked 0
+node: 46 weight: 4 visited: 0 marked 0
+node: 47 weight: 5 visited: 0 marked 0
