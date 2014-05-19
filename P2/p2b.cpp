@@ -131,7 +131,7 @@ bool checkColored(graph* g)
 }
 
 /**
- * Recursively color the graph, brute force approach
+ * Color a node, picking the smallest color that is not present within node's neighbors
  * @param g Graph instance to color
  * @param node 0 based index of the node to color
  * @param numColors Total number of colors to be used in the coloring scheme
