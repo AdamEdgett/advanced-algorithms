@@ -1,0 +1,50 @@
+
+Authors: 	Adam Edgett
+		Matt McDonald
+
+With this project, we attempted to solve NP time-complexity problems with a greedy algorithm. 
+
+== Problem 2A - Knapsack == 
+
+== Problem 2B - Coloring ==
+For coloring, we employed an algorithm that colored nodes in a greedy pattern by investigating its neighbors colors. Essentially, the algorithm is:
+
+	foreach(node in nodes)
+	{
+		color = findSmallestUnusedColorFromNeighbors();
+		
+		if (color not found)
+		{
+			colorNode(0);
+		}
+		else
+		{
+			colorNode(color);
+		}
+	}
+
+In words, we try and find an unused color in a node's neighbors. If there is a color available, use the smallest color (0->numColors). Otherwise, color the node with the first color (0).
+
+Due to the data structure of the graph, findSmallestUnusedColorFromNeighbors must iterate over |V| nods and thus the ultimate complexity is:
+	O(|V|^2)
+
+However, if we were to implement a more efficient way to iterate over a node's individual edges instead of checking graph.isEdge(node1, node2), we could reduce the complexity to:
+	O(|V| * |E|)
+
+Also relevant, due to the error prone nature of the algorithm, we don't check if the graph is valid until the end of the algorithm, greatly reducing the complexity of the algorithm.
+
+= Problem 2B - Results = 
+
+12 	nodes 3 colors : # Conflicts:  2
+12 	nodes 4 colors : # Conflicts:  0
+192 	nodes 6 colors : # Conflicts:  51
+192 	nodes 7 colors : # Conflicts:  32
+192 	nodes 8 colors : # Conflicts:  0
+24 	nodes 4 colors : # Conflicts:  4
+24 	nodes 5 colors : # Conflicts:  0
+48 	nodes 5 colors : # Conflicts:  8
+48 	nodes 6 colors : # Conflicts:  0
+96 	nodes 6 colors : # Conflicts:  16
+96 	nodes 7 colors : # Conflicts:  0
+
+As we can see, despite the fact that we chose an error prone algorithm, we can still find a solution with 0 conflicts in the graph in a very reasonable time. We also note that the more colors we have available, the greater chance our algorithm can color the graph successfully without conflicts. In every instance, a smaller number of colors creates conflicts and one or two more colors allow for the entire graph to be colored. This lends to credit that if there is flexibility on the number of colors used in a graph, this greedy algorithm may be of use, but has the potential to create a graph with a large number of colors (depending on the graph structure). 
