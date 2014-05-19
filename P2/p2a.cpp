@@ -56,10 +56,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "Reading knapsack instance" << endl;
 		knapsack k(fin);
-
 		exhaustiveKnapsack(k, 600);
-
-		cout << endl << "Best solution" << endl;
 		k.printSolution();
 	}
 
@@ -101,12 +98,14 @@ void exhaustiveKnapsack(knapsack &k, int t)
 /**
  * Calculates the value/cost ratio for each object
  * And stores the ratios in a vector
+ * TODO sort values to improve runtime
  * @param k the knapsack to use
  */
 void calculateValueCostRatios(knapsack &k) {
 	for(int i = 0; i < k.getNumObjects(); i++)
 	{
-		valueCostRatio[i] = (k.getValue(i) / (double)k.getCost(i));
+		valueCostRatio.insert(valueCostRatio.begin() + i,
+				(k.getValue(i) / (double)k.getCost(i)));
 	}
 }
 
