@@ -1,0 +1,58 @@
+CPLEX 12.6.0.0: time=600
+CPLEX 12.6.0.0: time limit with integer solution; objective 2
+2401590 MIP simplex iterations
+296085 branch-and-bound nodes
+absmipgap = 2, relmipgap = 1
+No basis.
+Resulting coloring:
+#	Color
+0	0
+1	4
+2	1
+3	0
+4	2
+5	1
+6	3
+7	1
+8	2
+9	3
+10	1
+11	4
+12	4
+13	1
+14	2
+15	2
+16	1
+17	3
+18	1
+19	2
+20	2
+21	1
+22	4
+23	0
+24	0
+25	1
+26	2
+27	0
+28	1
+29	0
+30	1
+31	2
+32	2
+33	1
+34	0
+35	4
+36	1
+37	4
+38	2
+39	1
+40	0
+41	1
+42	2
+43	2
+44	1
+45	4
+46	0
+47	3
+Number of Conflicts: 2
+
