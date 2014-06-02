@@ -1,0 +1,40 @@
+
+Authors: 	Adam Edgett
+		Matt McDonald
+
+With this project, we attempted to solve NP time-complexity problems graph coloring and knapsack with Integer Linear Programming algorithms.
+
+== Problem 2A - Knapsack ==
+== Problem 2A - Results ==
+
+== Problem 2B - Coloring ==
+In order to solve graph coloring with ILP, we use a conflict reduction scheme which minimizes the number of conflicts across the generated solution. 
+
+To begin, we were provided with color.mod that retrieved data from input files to which were we given variables to work with. This file is assumed common knowledge. 
+
+Then, we created our minimization constraint:
+	minimize objective: sum{i in 0..numNodes-1, j in 0..numNodes-1} conflict[i, j];
+
+This checks the conflict table for EVERY node to EVERY other node and minimizes the number of conflicts between them. Because we need partial solutions we have to set the conflicts as a soft minimization objective compared to a constraint. If we only wanted optimal solutions, we would translate this to a constraint where all conflicts are 0.
+
+Secondly, a requirement of the solution is that only ONE color can be chosen by a node. We sum all of the colors in color[node, 0..numColors] and only one can be selected (=1):
+	s.t. assignment {i in 0..numNodes-1}: sum {c in 0..numColors-1} color[i,c] = 1;
+
+Finally, we set a hard constraint on the conflict table so that any time two neighboring nodes have the same color, there must be a conflict present in the conflict table:
+	s.t. recordConstraint {(i,j) in edgeList, c in 0..numColors-1}: conflict[i,j] >= color[i,c] * color[j,c];
+
+== Problem 2B - Results ==
+# Nodes		#Colors		#Conflicts	#MIP simplex iterations		#branch and bound nodes		Limit
+12  		3 		2		3684				1384				Optimal
+12   		4 		0		47				0				Optimal
+24   		4 		2		1594434				478466				Optimal
+24   		5 		0		79				0				Optimal
+48   		5 		2		2401590				296085				Time
+48   		6 		0		11466				1141				Optimal
+96   		6 		2		253819				60732				Time
+96   		7 		0		30088				9515				Optimal
+192  		6 		594		3550				209				Time
+192  		7 		484		1273				2				Time
+192  		8 		538		803				0				Time
+
+As the above results indicate, we were able to solve all problems for a best possible solution except for the 192 nodes problem. While it can be argued we hit a time limit in both 48,5 and 96,6 the fact that we hit 2 conflicts (which is a single coloring conflict between nodes) and previous knowledge that this is the best possible answer, we conclude that it is the optimal solution. The time limit was reached while exhausting all other non-feasible solutions. In each of the 192 nodes instances, we see that we hit the time limit of 600 seconds before an optimal solution can be achieved. This is directly due to the large number of nodes in the problem.
