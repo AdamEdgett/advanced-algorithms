@@ -5,12 +5,24 @@ Authors: 	Adam Edgett
 With this project, we attempted to solve NP time-complexity problems graph coloring and knapsack with Integer Linear Programming algorithms.
 
 == Problem 2A - Knapsack ==
+To solve this problem we essentially converted the knapsack problem into a simple ILP problem
+We used a cost constraint to keep the total cost under the cost bound:
+    subject to costConstraint: sum{i in 0..n-1} cost[i] * x[i] <= costBound;
+We also set an objective of maximizing the total value:
+    maximize objective: sum{i in 0..n-1} value[i] * x[i];
+
+Using this constraint and objective, the ILP solver is able to find the optimal solution quickly
+
 == Problem 2A - Results ==
+Using the ampl language and the ILP solver, we were able to solve all of the instances of the knapsack problem very quickly
+We were able to run the 1024 item knapsack instance and find the optimal solution almost instantly
+This is considerably better than the brute force method that would come close to the optimal solution but took very long to complete
+It is also better than the greedy algorithm solution that would run quickly but didn't find an optimal solution
 
 == Problem 2B - Coloring ==
-In order to solve graph coloring with ILP, we use a conflict reduction scheme which minimizes the number of conflicts across the generated solution. 
+In order to solve graph coloring with ILP, we use a conflict reduction scheme which minimizes the number of conflicts across the generated solution.
 
-To begin, we were provided with color.mod that retrieved data from input files to which were we given variables to work with. This file is assumed common knowledge. 
+To begin, we were provided with color.mod that retrieved data from input files to which were we given variables to work with. This file is assumed common knowledge.
 
 Then, we created our minimization constraint:
 	minimize objective: sum{i in 0..numNodes-1, j in 0..numNodes-1} conflict[i, j];
