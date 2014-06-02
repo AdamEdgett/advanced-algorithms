@@ -1,3 +1,4 @@
+# Project 3: Adam Edgett and Matt McDonald
 # ILP model for graph coloring
 
 # number of nodes
@@ -9,7 +10,7 @@ param numColors;
 set edgeList dimen 2;
 
 # edge[op1,op2] = 1 iff (i,j) is in edgeList
-param edge {i in 0..numNodes-1, j in 0..numNodes-1} := 
+param edge {i in 0..numNodes-1, j in 0..numNodes-1} :=
 (if (i,j) in edgeList or (j,i) in edgeList then 1 else 0);
 
 # color[i,c] = true means that node i is assigned color c
@@ -39,14 +40,14 @@ printf "#\tColor\n";
 for {i in 0..numNodes-1}{
 	for {j in 0..numColors-1}{
 		if color[i, j] then {
-			printf "%d\t%d\n", i, j 
+			printf "%d\t%d\n", i, j
 		}
 	}
 	for {j in 0..numNodes-1}{
 		if conflict[i, j] > 0 then {
 			let numConflicts := numConflicts + 1;
-		}	
-	}	
+		}
+	}
 }
 
 printf "Number of Conflicts: %d\n", numConflicts;

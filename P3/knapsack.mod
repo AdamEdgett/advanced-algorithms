@@ -1,3 +1,4 @@
+# Project 3: Adam Edgett and Matt McDonald
 # ILP model for knapsack
 
 param n;
