@@ -458,7 +458,7 @@ void branchAndBound(knapsack &k, int maxTime)
 	problem.push_front(knapsack(k));
 	
 	// Branch and Bound search goes here
-	while(startTime - clock() < maxTime && problem.size() > 0)
+	while((clock() - ((float)startTime)) / CLOCKS_PER_SEC  < maxTime && problem.size() > 0)
 	{
 		knapsack current = problem.front();
 		problem.pop_front();
