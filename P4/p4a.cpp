@@ -433,7 +433,7 @@ void branchAndBound(knapsack &k, int maxTime)
 	// cout << bestSolution;
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	char x;
 	ifstream fin;
@@ -441,13 +441,14 @@ int main()
 	string fileName;
 	vector<bool> solution;
 
-	// Read the name of the graph from the keyboard or
-	// hard code it here for testing.
+	if (argc != 2)
+	{
+		cerr << "Failed to provide fileName" << endl;
+		exit(1);
+	}
 
-	fileName = "knapsack32.input";
-
-	//	cout << "Enter filename" << endl;
-	//	cin >> fileName;
+	fileName = argv[1];
+	cout << fileName << endl;
 
 	fin.open(fileName.c_str());
 	if (!fin)
