@@ -369,7 +369,7 @@ ostream &operator<<(ostream &ostr, vector<bool> v)
 		
 bool knapsack::isFathomed()
 {
-	return getCurrentCost() < getCostBound();
+	return getCurrentCost() <= getCostBound();
 }
 
 void knapsack::sortObjects()
@@ -411,13 +411,13 @@ float knapsack::bound() const
 // part of the knapsack.  Fits as many objects with the largest
 // value/cost ratio as can fit in the empty part of the knapsack.
 {
-	int val  = getCurrentValue();
+	float val  = getCurrentValue();
 	int cost = getCurrentCost();
 
 	for(int c = getNum(); c < getNumObjects(); c++)
 	{
 		//If element fits fully in sack, add it
-		if (getCost(c) + cost < getCostBound())
+		if (getCost(c) + cost <= getCostBound())
 		{
 			val += getValue(c);
 			cost += getCost(c);
@@ -426,9 +426,9 @@ float knapsack::bound() const
 		else
 		{
 			int difference = getCostBound() - cost;
-			double ratio = (double)difference / getCost(c);
+			float ratio = ((float)difference) / getCost(c);
 			
-			cost += ratio * getValue(c);
+			val += ratio * getValue(c);
 			break;
 		}
 	}
@@ -451,12 +451,11 @@ void branchAndBound(knapsack &k, int maxTime)
 	
 	knapsack bestSolution;
 
-	// Initially, decisions have not been made about any objects,
-	// so set num = 0.
+	// Initialize problem with two cases (Select the first element or not):
 	k.setNum(0);
-
-	// Add the empty knapsack subproblem to the list
 	problem.push_front(k);
+	k.select(0);
+	problem.push_front(knapsack(k));
 	
 	// Branch and Bound search goes here
 	while(startTime - clock() < maxTime && problem.size() > 0)
@@ -479,7 +478,6 @@ void branchAndBound(knapsack &k, int maxTime)
 	
 		if(current.getNum() < current.getNumObjects() - 1)
 		{
-				
 			current.setNum(current.getNum() + 1);
 			
 			//Consider including next element
