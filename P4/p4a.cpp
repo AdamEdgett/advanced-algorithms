@@ -51,7 +51,8 @@ class knapsack
 		void setNum(int);
 		int getNum() const;
 		float bound() const;
-
+		
+		bool isFathomed();
 	private:
 		int numObjects;
 		int costBound;
@@ -365,6 +366,11 @@ ostream &operator<<(ostream &ostr, vector<bool> v)
 
 	return ostr;
 }
+		
+bool knapsack::isFathomed()
+{
+	return getCurrentCost() < getCostBound();
+}
 
 void knapsack::sortObjects()
 // Sort the objects by decreasing ratio of value/cost using insertion
@@ -405,6 +411,29 @@ float knapsack::bound() const
 // part of the knapsack.  Fits as many objects with the largest
 // value/cost ratio as can fit in the empty part of the knapsack.
 {
+	int val  = getCurrentValue();
+	int cost = getCurrentCost();
+
+	for(int c = getNum(); c < getNumObjects(); c++)
+	{
+		//If element fits fully in sack, add it
+		if (getCost(c) + cost < getCostBound())
+		{
+			val += getValue(c);
+			cost += getCost(c);
+		}
+		//Otherwise, add the proportion of it that fits into the knapsack
+		else
+		{
+			int difference = getCostBound() - cost;
+			double ratio = (double)difference / getCost(c);
+			
+			cost += ratio * getValue(c);
+			break;
+		}
+	}
+
+	return val;
 }
 
 void branchAndBound(knapsack &k, int maxTime)
@@ -414,10 +443,13 @@ void branchAndBound(knapsack &k, int maxTime)
 // to keep or not keep object n, and then iterates to n+1.	Stores
 // the best solution found so far in bestSolution.
 {
+	cout << "Starting solver" << endl;
 	clock_t startTime = clock();
 
 	deque<knapsack> problem;
 	deque<knapsack>::iterator itr;
+	
+	knapsack bestSolution;
 
 	// Initially, decisions have not been made about any objects,
 	// so set num = 0.
@@ -425,12 +457,44 @@ void branchAndBound(knapsack &k, int maxTime)
 
 	// Add the empty knapsack subproblem to the list
 	problem.push_front(k);
-
+	
 	// Branch and Bound search goes here
+	while(startTime - clock() < maxTime && problem.size() > 0)
+	{
+		knapsack current = problem.front();
+		problem.pop_front();
+		
+		float bound = k.bound();
+	
+		//If cost > maxCost or theoretical value > bestCurrentSoluton, omit subtree
+		if(!current.isFathomed() || bound < bestSolution.getCurrentValue())
+		{
+			continue;
+		}
 
+		if (current.getCurrentValue() > bestSolution.getCurrentValue())
+		{
+			bestSolution = knapsack(current);
+		}
+	
+		if(current.getNum() < current.getNumObjects() - 1)
+		{
+				
+			current.setNum(current.getNum() + 1);
+			
+			//Consider including next element
+			current.select(current.getNum());
+			problem.push_front(knapsack(current));
+			
+			//Consider NOT incuding next element
+			current.unSelect(current.getNum());
+			problem.push_front(knapsack(current));
 
-	// cout << "Best value found: " << bestValue << endl;
-	// cout << bestSolution;
+		}
+	}
+	cout << "==== Solution ====" << endl;
+	cout << "Best value found: " << endl;
+	cout << bestSolution;
 }
 
 int main(int argc, char** argv)
@@ -448,7 +512,6 @@ int main(int argc, char** argv)
 	}
 
 	fileName = argv[1];
-	cout << fileName << endl;
 
 	fin.open(fileName.c_str());
 	if (!fin)
@@ -461,7 +524,6 @@ int main(int argc, char** argv)
 	{
 		cout << "Reading knapsack instance" << endl;
 		knapsack k(fin);
-		cout << k;
 
 		k.sortObjects();
 		branchAndBound(k,600);
