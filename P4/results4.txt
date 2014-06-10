@@ -1,0 +1,41 @@
+
+Authors: 	Adam Edgett
+		Matt McDonald
+
+With this project, we attempted to solve 0/1 Knapsack via branch and bound.
+== Problem 4 - Knapsack ==
+
+In order to solve the 0/1 knapsack problem via branch and bound, we were provided with a well-fleshed out code p4.cpp which contained a knapsack class to help solve the problem. We then took this and simply implemented the branch and bound logic to solve the problems.This solution was broken into two parts: a bound calculation and logic to perform the branch and bound operations.
+
+Ultimately, our solution takes the brute force 2^n possible solutions and can greatly reduce the number of operations performed. 
+
+=== branchAndBound === 
+
+Implementing branch and bound for 0/1 knapsack used standard branch and bound techniques. We first sorted the list of objects by value/cost ratio to allow operations to be easier. Once sorted, we walk the list and for each element in the list add two nodes to our solution tree. These two nodes are either to INCLUDE or EXCLUDE the element. We add both of these subproblems to the list of solutions to check. Ultimately, this will turn out to a tree of possible solutions where every possible combination of every element is checked. 
+
+The power of the branch and bound comes when we go to solve a subproblem. We check to see if the theoretical bound of the node's subtree is less than the best solution found so far. If it is less, we immediately disregard the entire subtree as the best achievable solution is less than our best solution already found and would be a waste to check. This is where the branch and bound saves us time.
+
+=== knapsack::bound ===
+
+For our bound calculation, we implemented a computation that returned the upper bound of the current chosen subset of solution using the fractional knapsack problem as our base. The premise behind this is that since fractional knapsack does not return a valid solution but rather a theoretical best solution possible at that point in time, it provides us with a good bound estimate to help prune out tree subgraphs that will ultimately not yield optimal answers anyway. The fractional knapsack will never yield a proper solution because we cannot split elements in 0/1 knapsack.
+
+In order to solve this, we take the point in the graph where we currently are (currentTotalCost) and pick the next n elements with the highest value/cost ration that are not in the knapsack yet to fill the sack. When we cannot fill the sack with the last element due to cost consideration, we take a ratio of its value. Due to the fact that the nodes are already sorted for us, we simply walk the collection of nodes from the current selected and add the next elements until full to determine our cost factor.
+
+========================= Problem 4 - Results ===========================
+| #	Cost Bound	Cost Used	Total Value	ILP 		|
+| 8	1639		1592		2192		=		|
+| 12	2187		2178		2978		=		|
+| 16	3839		3839		4939		=		|
+| 20	4875		4858		6258		=		|
+| 28	7384		7384		9284		=		|
+| 32	7969		7969		10169		=		|
+| 48	11119		1119		13719		14519		|
+| 64	15574		15574		17874		20074		|
+| 128	31620		31620		35420		40718		|
+| 256	62405		62405		69905		80605		|
+| 512	1330949		1330609		1485609		1687950		|
+| 1024	2581537		1312633		1454633		3302540		|
+========================================================================|
+Note: The above results (ILP vs Custom B+B) were computed on two far different machines.
+
+From our results, we can see that our custom B+B (Except for the final case) was very similar to the ILP solution. While it is certaintly possible the difference in results were due to machine differences, the ultimate delineation would fall to the fact that the ILP B+B is optimized far better than our version. We used no compiler optimizations, our data structures were heavy and expensive and ultimately paid the price in the solutions achieved. That said, we were able to achieve exact solutions on the smaller problems and values close to the optimal solutions for the harder problems.
