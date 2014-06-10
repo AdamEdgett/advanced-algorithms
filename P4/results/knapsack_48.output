@@ -1,0 +1,28 @@
+Reading knapsack instance
+Sorting objects
+Starting solver
+==== Solution ====
+Best value found: 
+------------------------------------------------
+Num objects: 48 Cost bound: 11119
+Total value: 12819
+Total cost: 11119
+
+1  101 1
+15  586 486
+20  654 554
+21  689 589
+9  713 613
+47  727 627
+37  745 645
+42  750 650
+22  775 675
+7  790 690
+16  805 705
+0  825 725
+14  830 730
+34  898 798
+17  923 823
+46  938 838
+24  1070 970
+
