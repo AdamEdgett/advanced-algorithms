@@ -463,7 +463,7 @@ void branchAndBound(knapsack &k, int maxTime)
 		knapsack current = problem.front();
 		problem.pop_front();
 		
-		float bound = k.bound();
+		float bound = current.bound();
 	
 		//If cost > maxCost or theoretical value > bestCurrentSoluton, omit subtree
 		if(!current.isFathomed() || bound < bestSolution.getCurrentValue())
