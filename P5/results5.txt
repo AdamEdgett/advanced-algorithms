@@ -1,0 +1,13 @@
+
+Authors: 	Adam Edgett
+		Matt McDonald
+
+
+== Problem 2A - Knapsack ==
+
+== Problem 2A - Results ==
+
+== Problem 2B - Coloring ==
+
+== Problem 2B - Results ==
+
