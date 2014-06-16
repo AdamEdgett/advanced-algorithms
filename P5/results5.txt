@@ -52,8 +52,8 @@ For the second problem, we simply built a new graph on EVERY single iteration an
 
 24	4	 0		Greedy - 2Opt
 24	4	 0		Greedy - 3Opt	
-24	4	 1		Random - 2Opt
-24	4	 2		Random - 3Opt
+24	4	 2		Random - 2Opt
+24	4	 1		Random - 3Opt
 24	5	 0		Greedy - 2Opt
 24	5	 0		Greedy - 3Opt	
 24	5	 0		Random - 2Opt
@@ -61,37 +61,35 @@ For the second problem, we simply built a new graph on EVERY single iteration an
 
 48	5	 0		Greedy - 2Opt
 48	5	 0		Greedy - 3Opt	
-48	5	 20		Random - 2Opt
-48	5	 17		Random - 3Opt
+48	5	 17		Random - 2Opt
+48	5	 19		Random - 3Opt
 48	6	 0		Greedy - 2Opt
 48	6	 0		Greedy - 3Opt	
-48	6	 12		Random - 2Opt
-48	6	 12		Random - 3Opt
+48	6	 10		Random - 2Opt
+48	6	 13		Random - 3Opt
 
 96	6	 0		Greedy - 2Opt
 96	6	 0		Greedy - 3Opt	
-96	6	 80		Random - 2Opt
-96	6	 77		Random - 3Opt
+96	6	 76		Random - 2Opt
+96	6	 76		Random - 3Opt
 96	7	 0		Greedy - 2Opt
 96	7	 0		Greedy - 3Opt	
-96	7	 60		Random - 2Opt
-96	7	 62		Random - 3Opt
+96	7	 61		Random - 2Opt
+96	7	 66		Random - 3Opt
 
 192	6	 1		Greedy - 2Opt
 192	6	 1		Greedy - 3Opt	
-192	6	 313		Random - 2Opt
-192	6	 309		Random - 3Opt
+192	6	 315		Random - 2Opt
+192	6	 310		Random - 3Opt
 192	7	 0		Greedy - 2Opt		
 192	7	 0		Greedy - 3Opt		
-192	7	 243		Random - 2Opt	
-192	7	 259		Random - 3Opt
+192	7	 267		Random - 2Opt	
+192	7	 257		Random - 3Opt
 192	8	 0		Greedy - 2Opt
 192	8	 0		Greedy - 3Opt	
 192	8	 224		Random - 2Opt
-192	8	 220		Random - 3Opt
+192	8	 226		Random - 3Opt
 
 As we can see from the chart, our Greedy algorithm performed very well in combination with the localized search. It is clearly evident that it we are looking for a fast fairly accurate answer a greedy search is generally a good strategy and if there needs additional optimization, localized search MAY work. We see why above. If we look at the easier problems (for example 92 nodes, we see that previously we had major issues coloring with 6 colors and couldn't find an optimal solution. However, we are able to with the combination of greedy + local search. That said, when we attempt on the larger problem (192), it is still too difficult a problem. This is because our local search function is not broad enough to pan the tree of possible solutions from our greedy solution and an optimal. 
 
 To also look at the randomized solutions, we see that they are okay. Compared to a trivial enumeration they are FAR better, but in reality they are expensive, time consuming and really need a targeted applicable case to work well. We see this as it can for the most part provide a solution for the smaller, easier problems, but fails to solve the harder problems. The conclusion is that this algorithm is a useful tool in the toolbox, but only for very specific cases. 
-
-
