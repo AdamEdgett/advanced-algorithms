@@ -274,6 +274,7 @@ void findNextEdge(graph* g, int* origin, int* dest)
 			{
 				continue;
 			}
+			
 			if (g->isEdge(i, j))
 			{
 				*origin = i;
@@ -298,9 +299,15 @@ bool localOptimum(graph* g, int numColors, int opt)
 	int origin = 0;
 	int dest = 1;
 	
-	while(switched){
+	while(!switched){
 		switched = false;
 		origin = findMostConflicts(g);
+		
+		if(origin == -1)
+		{
+			break;
+		}
+
 		findNextEdge(g, &origin, &dest);
 		
 		if (g->getNode(origin).getWeight() == g->getNode(dest).getWeight())
@@ -329,6 +336,7 @@ bool localOptimum(graph* g, int numColors, int opt)
 				}
 			}
 		}
+		checkTimeLimit();
 	}
 	
 	return checkColored(g);
