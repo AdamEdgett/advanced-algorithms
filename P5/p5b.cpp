@@ -35,7 +35,7 @@ void printSolution();
 bool localOptimum(graph* g, int numColors, int opt);
 bool randomSolution(graph* g, int numColors);
 bool checkColored(graph* g);
-int findMostConflicts(graph* g);
+int findMostConflicts(graph* g, int* max);
 
 int main(int argc, char** argv)
 {
@@ -298,10 +298,11 @@ bool localOptimum(graph* g, int numColors, int opt)
 
 	int origin = 0;
 	int dest = 1;
+	int max = 9999;
 	
 	while(!switched){
 		switched = false;
-		origin = findMostConflicts(g);
+		origin = findMostConflicts(g, &max);
 		
 		if(origin == -1)
 		{
@@ -347,7 +348,7 @@ bool localOptimum(graph* g, int numColors, int opt)
  * @param graph g Graph to search
  * @return int Index of node with most conflicts
  */
-int findMostConflicts(graph* g)
+int findMostConflicts(graph* g, int* max)
 {
 	int conflicts = 0;
 	int maxConflicts = 0;
@@ -370,13 +371,17 @@ int findMostConflicts(graph* g)
 			}
 		}
 
-		if(conflicts > maxConflicts)
+		//Set the new value to one with the most conflicts
+		//  Which ALSO isn't the same as the previous value with the same # of conflicts
+		//  Essentially cascade downwards from cycles
+		if(conflicts > maxConflicts && (conflicts < *max))
 		{
 			result = i;
-			conflicts = maxConflicts;
+			maxConflicts = conflicts;
 		}
 	}
 
+	*max = maxConflicts;
 	return result;
 }
 
@@ -458,7 +463,7 @@ bool recolorNodes(graph* g, int origin, int dest, int tri, int numColors)
 				t->setWeight(c);
 			}
 		}
-
+	
 		return true;
 	}
 
