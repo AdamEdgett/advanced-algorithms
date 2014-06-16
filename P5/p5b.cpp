@@ -28,12 +28,14 @@ static graph bestFound;
 static int minConflicts;
 
 void greedyColoring(graph* g, int numColors);
-void greedyColorNode(graph* g, int node, int numColors);
+bool recolorNode(graph* g, int node, int numColors);
+bool recolorNodes(graph* g, int origin, int dest, int tri, int numColors);
 void checkTimeLimit();
 void printSolution();
 bool localOptimum(graph* g, int numColors, int opt);
 bool randomSolution(graph* g, int numColors);
 bool checkColored(graph* g);
+int findMostConflicts(graph* g);
 
 int main(int argc, char** argv)
 {
@@ -73,71 +75,80 @@ int main(int argc, char** argv)
 		timeLimit = 600;
 		start = time(0);
 		cout << "Num colors: " << numColors << endl;
-
-		//Find an initial greedy Solution
-		cout << "Solving with Greedy"<< endl;
-		greedyColoring(&g, numColors);
-		//Next, find local optimums
-		cout << "Finding local optimium (2 opt)" << endl;
-		g = localOptimum(&g, numColors, 2);
-		printSolution();
-		cout << "Finding local optimium (3 opt)" << endl;
-		g = localOptimum(&g, numColors, 3);
-		printSolution();
-
-		cout << "Finding random solution(s) with local optimum (2 opt)" << endl;
-		//Reset graph
-		g = graph(original);
-		bestFound = g;
-		minConflicts = g.numEdges();
-		start = time(0);
-		//Find initial random Solution
-		//Next, find a local optimum
-		while(1){
-			if(randomSolution(&g, numColors)){
-				break;
-			}
-			if(localOptimum(&g, numColors, 2)){
-				break;
-			}
-			checkTimeLimit();
+		
+		try
+		{
+			//Find an initial greedy Solution
+			cout << "Solving with Greedy"<< endl;
+			greedyColoring(&g, numColors);
+			//Next, find local optimums
+			cout << "Finding local optimum (2 opt)" << endl;
+			localOptimum(&g, numColors, 2);
+			printSolution();
+			cout << "Finding local optimum (3 opt)" << endl;
+			localOptimum(&g, numColors, 3);
+		}
+		catch (baseException ex)
+		{
+			cout << ex.what() << endl;
+			return 1;
 		}
 		printSolution();
-		
-		cout << "Finding random solution(s) with local optimum (3 opt)" << endl;
-		//Reset graph
-		g = graph(original);
-		bestFound = g;
-		minConflicts = g.numEdges();
-		start = time(0);
-		//Find initial random Solution
-		//Next, find a local optimum
-		while(1){
-			if(randomSolution(&g, numColors)){
-				break;
+		try
+		{
+			cout << "Finding random solution(s) with local optimum (2 opt)" << endl;
+			//Reset graph
+			g = graph(original);
+			bestFound = g;
+			minConflicts = g.numEdges();
+			start = time(0);
+			//Find initial random Solution
+			//Next, find a local optimum
+			while(1){
+				if(randomSolution(&g, numColors)){
+					break;
+				}
+				if(localOptimum(&g, numColors, 2)){
+					break;
+				}
+				checkTimeLimit();
 			}
-			if(localOptimum(&g, numColors, 3)){
-				break;
+		}
+		catch (baseException ex)
+		{
+			cout << ex.what() << endl;
+		}
+		printSolution();
+		try
+		{		
+			cout << "Finding random solution(s) with local optimum (3 opt)" << endl;
+			//Reset graph
+			g = graph(original);
+			bestFound = g;
+			minConflicts = g.numEdges();
+			start = time(0);
+			//Find initial random Solution
+			//Next, find a local optimum
+			while(1){
+				if(randomSolution(&g, numColors)){
+					break;
+				}
+				if(localOptimum(&g, numColors, 3)){
+					break;
+				}
+				checkTimeLimit();
 			}
-			checkTimeLimit();
-		}	
-	}
-	catch (indexRangeError &ex)
-	{
-		cout << ex.what() << endl;
-		return 1;
-	}
-	catch (rangeError &ex)
-	{
-		cout << ex.what() << endl;
-		return 1;
+		}
+		catch (baseException &ex)
+		{
+			cout << ex.what() << endl;
+		}
+		printSolution();
 	}
 	catch (baseException &ex)
 	{
 		cout << ex.what() << endl;
 	}
-
-	printSolution();
 } 
 
 void printSolution()
@@ -187,7 +198,7 @@ bool checkColored(graph* g)
  * @param node 0 based index of the node to color
  * @param numColors Total number of colors to be used in the coloring scheme
  */
-void greedyColorNode(graph* g, int current, int numColors)
+bool recolorNode(graph* g, int current, int numColors)
 {
 	node* n = &g->getNode(current);
 	int neighborWeight = 0;
@@ -211,12 +222,11 @@ void greedyColorNode(graph* g, int current, int numColors)
 		if ((neighborWeight & (1 << c)) == 0)
 		{
 			n->setWeight(c);
-			return;
+			return true;
 		}
 	}
 
-	//0 Otherwise
-	n->setWeight(0);
+	return false;
 }
 
 /**
@@ -234,7 +244,7 @@ void greedyColoring(graph* g, int numColors)
 
 	for (int c = 0; c < g->numNodes(); c++)
 	{
-		greedyColorNode(g, c, numColors);
+		recolorNode(g, c, numColors);
 		checkTimeLimit();
 	}
 	checkColored(g);
@@ -253,6 +263,26 @@ void checkTimeLimit()
 	}
 }
 
+void findNextEdge(graph* g, int* origin, int* dest)
+{
+	//Edges should really be in a hashmap to decrease O(V*V) to O(E)
+	for (int i = *origin; i < g->numNodes(); i++)
+	{
+		for (int j = *dest; j < g->numNodes(); j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			if (g->isEdge(i, j))
+			{
+				*origin = i;
+				*dest = j;
+			}
+		}
+	}	
+}
+
 /**
  * Finds a local optimum and returns the result 
  *
@@ -263,8 +293,83 @@ void checkTimeLimit()
  */
 bool localOptimum(graph* g, int numColors, int opt)
 {
-	//TODO
-	return true;
+	bool switched = false;
+
+	int origin = 0;
+	int dest = 1;
+	
+	while(switched){
+		switched = false;
+		origin = findMostConflicts(g);
+		findNextEdge(g, &origin, &dest);
+		
+		if (g->getNode(origin).getWeight() == g->getNode(dest).getWeight())
+		{
+			if (opt == 3)
+			{
+				for(int c = 0; c < g->numNodes(); c++)
+				{
+					if(	c != dest && c != origin && 
+						((g->isEdge(origin, c) || g->isEdge(c, origin)) && 
+						(g->getNode(origin).getWeight() == g->getNode(c).getWeight()) ||
+						((g->isEdge(dest, c) || g->isEdge(c, dest)) &&
+						(g->getNode(dest).getWeight() == g->getNode(c).getWeight()))))
+					{
+						if (recolorNodes(g, origin, dest, c, numColors))
+						{
+							switched = true;
+						}
+					}
+				}
+			}
+			else
+			{
+				if(recolorNodes(g, origin, dest, -1, numColors)){
+					switched = true;
+				}
+			}
+		}
+	}
+	
+	return checkColored(g);
+}
+
+/**
+ * Find the node with the most conflicts in the graph
+ * @param graph g Graph to search
+ * @return int Index of node with most conflicts
+ */
+int findMostConflicts(graph* g)
+{
+	int conflicts = 0;
+	int maxConflicts = 0;
+	int result = -1;
+	for (int i = 0; i < g->numNodes(); i++)
+	{
+		conflicts = 0;
+		for (int j = 0; j < g->numNodes(); j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			if (g->isEdge(i, j))
+			{
+				if (g->getNode(i).getWeight() == g->getNode(j).getWeight())
+				{
+					conflicts++;
+				}
+			}
+		}
+
+		if(conflicts > maxConflicts)
+		{
+			result = i;
+			conflicts = maxConflicts;
+		}
+	}
+
+	return result;
 }
 
 /**
@@ -282,4 +387,72 @@ bool randomSolution(graph* g, int numColors)
 	}
 	
 	return checkColored(&result); //When the Angels win the pennant...
+}
+
+bool recolorNodes(graph* g, int origin, int dest, int tri, int numColors)
+{
+	node* o = &g->getNode(origin);
+	node* d = &g->getNode(dest);
+	node* t = NULL;
+	int neighborWeightOrigin = 0;
+	int neighborWeightDest = 0;
+	int neighborWeightTri = 0;
+	
+	bool is3opt = tri >= 0;
+	if(!is3opt)
+	{
+		neighborWeightTri = neighborWeightOrigin;
+	}
+	else
+	{
+		t = &g->getNode(tri);
+	}
+
+	for (int i = 0; i < g->numNodes(); i++)
+	{
+		if (origin != i && dest != i && (!is3opt || tri != i))
+		{
+			if (g->isEdge(origin, i) || g->isEdge(i, origin))
+			{
+				neighborWeightOrigin |= (1 << g->getNode(i).getWeight());
+			}
+			
+			if (g->isEdge(dest, i) || g->isEdge(i, dest))
+			{
+				neighborWeightDest |= (1 << g->getNode(i).getWeight());
+			}
+
+			if (is3opt && g->isEdge(tri, i) || g->isEdge(i, dest))
+			{
+				neighborWeightTri |= (1 << g->getNode(i).getWeight());
+			}
+		}	
+	}
+	
+	//If there is a coloring which exists
+	if (neighborWeightOrigin ^ neighborWeightDest ^ neighborWeightTri)
+	{
+		int combined = neighborWeightOrigin ^ neighborWeightDest ^ neighborWeightTri;
+
+		//Pick lowest color not used in neighbors
+		for (int c = 0; c < numColors; c++)
+		{
+			if ((combined & neighborWeightOrigin & (1 << c)) != 0)
+			{
+				o->setWeight(c);
+			}
+			if ((combined & neighborWeightDest & (1 << c) != 0))
+			{
+				d->setWeight(c);
+			}
+			if (is3opt && ((combined && neighborWeightTri & (1 << c) != 0)))
+			{
+				t->setWeight(c);
+			}
+		}
+
+		return true;
+	}
+
+	return false;
 }
