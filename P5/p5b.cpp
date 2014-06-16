@@ -12,6 +12,7 @@
 #include <queue>
 #include <vector>
 #include <time.h>
+#include <stdlib.h>
 
 #include "d_except.h"
 #include "d_matrix.h"
@@ -30,8 +31,9 @@ void greedyColoring(graph* g, int numColors);
 void greedyColorNode(graph* g, int node, int numColors);
 void checkTimeLimit();
 void printSolution();
-graph localOptimum(graph* g, int numColors, int opt);
-graph randomSolution(graph* g, int numColors);
+bool localOptimum(graph* g, int numColors, int opt);
+bool randomSolution(graph* g, int numColors);
+bool checkColored(graph* g);
 
 int main(int argc, char** argv)
 {
@@ -61,7 +63,8 @@ int main(int argc, char** argv)
 	{
 		cout << "Reading number of colors" << endl;
 		fin >> numColors;
-
+		srand (time(NULL));
+		
 		cout << "Reading graph" << endl;
 		graph g(fin);
 		bestFound = g;
@@ -91,10 +94,15 @@ int main(int argc, char** argv)
 		//Find initial random Solution
 		//Next, find a local optimum
 		while(1){
-			randomSolution(&g, numColors);
-			localOptimum(&g, numColors, 2);
+			if(randomSolution(&g, numColors)){
+				break;
+			}
+			if(localOptimum(&g, numColors, 2)){
+				break;
+			}
 			checkTimeLimit();
 		}
+		printSolution();
 		
 		cout << "Finding random solution(s) with local optimum (3 opt)" << endl;
 		//Reset graph
@@ -105,8 +113,12 @@ int main(int argc, char** argv)
 		//Find initial random Solution
 		//Next, find a local optimum
 		while(1){
-			randomSolution(&g, numColors);
-			localOptimum(&g, numColors, 3);
+			if(randomSolution(&g, numColors)){
+				break;
+			}
+			if(localOptimum(&g, numColors, 3)){
+				break;
+			}
 			checkTimeLimit();
 		}	
 	}
@@ -126,7 +138,7 @@ int main(int argc, char** argv)
 	}
 
 	printSolution();
-} // end main
+} 
 
 void printSolution()
 {
@@ -167,7 +179,7 @@ bool checkColored(graph* g)
 	}
 
 	return minConflicts == 0;
-} // end checkColored
+} 
 
 /**
  * Color a node, picking the smallest color that is not present within node's neighbors
@@ -205,7 +217,7 @@ void greedyColorNode(graph* g, int current, int numColors)
 
 	//0 Otherwise
 	n->setWeight(0);
-} // end greedyColorNode
+}
 
 /**
  * Greedy coloring algorithm where iterate 0->n, for x picking the smallest color that is not present within x's neighbors
@@ -228,6 +240,10 @@ void greedyColoring(graph* g, int numColors)
 	checkColored(g);
 }
 
+/**
+ * Check a static timeline metric and see if time expired. Throw exception if so
+ *
+ */
 void checkTimeLimit()
 {
 	t = time(0);
@@ -245,20 +261,25 @@ void checkTimeLimit()
  * @param int 2-opt or 3-opt 
  * @param NEW graph with a local opt solution
  */
-graph localOptimum(graph* g, int numColors, int opt)
+bool localOptimum(graph* g, int numColors, int opt)
 {
 	//TODO
-	return graph(*g);
+	return true;
 }
 
 /**
- *
+ * Choose a random solution
  * @param graph g Original graph to find a solution for
  * @param int numColors Max # colors
  * @return NEW graph with a random solution
  */
-graph randomSolution(graph* g, int numColors)
+bool randomSolution(graph* g, int numColors)
 {
-	//TODO
-	return graph(*g);
+	graph result(*g);
+	for(int c = 0; c < g->numNodes(); c++)
+	{
+		result.getNode(c).setWeight(rand() % numColors);
+	}
+	
+	return checkColored(&result); //When the Angels win the pennant...
 }
