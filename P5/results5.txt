@@ -2,6 +2,12 @@
 Authors: 	Adam Edgett
 		Matt McDonald
 
+In this project, we solved Knapsack and Graph coloring through a combination of different algorithmic techniques. 
+
+	Firstly, we combined a greedy algorithm with a Steepest decent local search algorithm in order to find a very fast, sometimes optimal answer.
+	Secondly, we performed the same combination but substitued a random solution in place of the greedy solution. For this, we repeated the operation of randomize, local search for 10 minutes.
+
+	The results are broken up by problem:
 
 == Problem 2A - Knapsack ==
 
@@ -9,5 +15,83 @@ Authors: 	Adam Edgett
 
 == Problem 2B - Coloring ==
 
+Coloring presented a few unique challenges. Common to both subproblems is our introduction of our Steepest descent local search algorithm. It is defined as the following pseudocode:
+
+bool localOptimum(){
+	while (thereIsAMoveAvailaible()){
+		node = findNodeWithMostConflicts();
+		node2 = getFirstConflictWithNode(node);
+		node3 = if3Opt ? getFirstConflictWithNode(node, node2) : NULL; //Either conflict for 3 opt neighbor
+
+		if (aValidColoringExistsBetweenNodes(node, node2, node3)){
+			recolorNodesToReduceConflicts(node, node2, node3);
+		}
+
+	}
+
+	return numConflicts == 0;
+}
+
+The motivation by sorting between the nodes with the most conflicts was that following the steepest descent methodology, we wanted to reduce the greatest number of conflicts at once. Thus, we essentially sort the nodes by their number of conflicts and attempt to resolve them. If there are TOO many conflicts to resolve in a 2-way or 3-way swap, then we propagate to the smaller conflict trees and attempt to solve them first. Then, we return to the larger conflict nodes again. We break when there is not a valid swap possible (Local minimum).
+
+For the first subproblem, we re-used our exact greedy algorithm previously implemented. It consisted of iterating over every node and assigning to it the lowest color possible in which its neighbors did not own the color. Afterwards we used the above  
+
+For the second problem, we simply built a new graph on EVERY single iteration and randomized the colorings. We implored no logic to these randomizations. 
+
 == Problem 2B - Results ==
+#Nodes	Colors	Conflicts	Algorithm
+
+12	3	 0		Greedy - 2Opt
+12	3	 0		Greedy - 3Opt	
+12	3	 1		Random - 2Opt
+12	3	 1		Random - 3Opt
+12	4	 0		Greedy - 2Opt
+12	4	 0		Greedy - 3Opt	
+12	4	 0		Random - 2Opt
+12	4	 0		Random - 3Opt
+
+24	4	 0		Greedy - 2Opt
+24	4	 0		Greedy - 3Opt	
+24	4	 1		Random - 2Opt
+24	4	 2		Random - 3Opt
+24	5	 0		Greedy - 2Opt
+24	5	 0		Greedy - 3Opt	
+24	5	 0		Random - 2Opt
+24	5	 0		Random - 3Opt
+
+48	5	 0		Greedy - 2Opt
+48	5	 0		Greedy - 3Opt	
+48	5	 20		Random - 2Opt
+48	5	 17		Random - 3Opt
+48	6	 0		Greedy - 2Opt
+48	6	 0		Greedy - 3Opt	
+48	6	 12		Random - 2Opt
+48	6	 12		Random - 3Opt
+
+96	6	 0		Greedy - 2Opt
+96	6	 0		Greedy - 3Opt	
+96	6	 80		Random - 2Opt
+96	6	 77		Random - 3Opt
+96	7	 0		Greedy - 2Opt
+96	7	 0		Greedy - 3Opt	
+96	7	 60		Random - 2Opt
+96	7	 62		Random - 3Opt
+
+192	6	 1		Greedy - 2Opt
+192	6	 1		Greedy - 3Opt	
+192	6	 313		Random - 2Opt
+192	6	 309		Random - 3Opt
+192	7	 0		Greedy - 2Opt		
+192	7	 0		Greedy - 3Opt		
+192	7	 243		Random - 2Opt	
+192	7	 259		Random - 3Opt
+192	8	 0		Greedy - 2Opt
+192	8	 0		Greedy - 3Opt	
+192	8	 224		Random - 2Opt
+192	8	 220		Random - 3Opt
+
+As we can see from the chart, our Greedy algorithm performed very well in combination with the localized search. It is clearly evident that it we are looking for a fast fairly accurate answer a greedy search is generally a good strategy and if there needs additional optimization, localized search MAY work. We see why above. If we look at the easier problems (for example 92 nodes, we see that previously we had major issues coloring with 6 colors and couldn't find an optimal solution. However, we are able to with the combination of greedy + local search. That said, when we attempt on the larger problem (192), it is still too difficult a problem. This is because our local search function is not broad enough to pan the tree of possible solutions from our greedy solution and an optimal. 
+
+To also look at the randomized solutions, we see that they are okay. Compared to a trivial enumeration they are FAR better, but in reality they are expensive, time consuming and really need a targeted applicable case to work well. We see this as it can for the most part provide a solution for the smaller, easier problems, but fails to solve the harder problems. The conclusion is that this algorithm is a useful tool in the toolbox, but only for very specific cases. 
+
 
