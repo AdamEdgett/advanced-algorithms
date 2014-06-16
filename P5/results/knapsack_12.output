@@ -1,0 +1,63 @@
+Reading knapsack instance
+Cost limit: 2187
+Solving with Greedy
+Finding local optimium (2 opt)
+------------------------------------------------
+Total value: 2978
+Total cost: 2178
+
+0  622 522
+1  101 1
+2  219 119
+4  287 187
+5  467 367
+8  122 22
+9  713 613
+10  447 347
+
+Finding local optimium (3 opt)
+------------------------------------------------
+Total value: 2978
+Total cost: 2178
+
+0  622 522
+1  101 1
+2  219 119
+4  287 187
+5  467 367
+8  122 22
+9  713 613
+10  447 347
+
+Finding random solution(s) with local optimum (2 opt)
+========== Time expired ==========
+========== Time expired ==========
+------------------------------------------------
+Total value: 2978
+Total cost: 2178
+
+0  622 522
+1  101 1
+2  219 119
+4  287 187
+5  467 367
+8  122 22
+9  713 613
+10  447 347
+
+Finding random solution(s) with local optimum (3 opt)
+========== Time expired ==========
+========== Time expired ==========
+------------------------------------------------
+Total value: 2978
+Total cost: 2178
+
+0  622 522
+1  101 1
+2  219 119
+4  287 187
+5  467 367
+8  122 22
+9  713 613
+10  447 347
+
