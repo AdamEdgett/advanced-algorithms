@@ -105,6 +105,7 @@ int main(int argc, char** argv)
 			//Find initial random Solution
 			//Next, find a local optimum
 			while(1){
+				g = graph(original);
 				if(randomSolution(&g, numColors)){
 					break;
 				}
@@ -130,6 +131,7 @@ int main(int argc, char** argv)
 			//Find initial random Solution
 			//Next, find a local optimum
 			while(1){
+				g = graph(original);
 				if(randomSolution(&g, numColors)){
 					break;
 				}
@@ -183,7 +185,7 @@ bool checkColored(graph* g)
 		}
 	}
 
-	if (conflicts <= minConflicts)
+	if (conflicts < minConflicts)
 	{
 		bestFound = graph(*g);
 		minConflicts = conflicts;
@@ -300,13 +302,15 @@ bool localOptimum(graph* g, int numColors, int opt)
 	int dest = 1;
 	int max = 9999;
 	
-	while(!switched){
+	while(switched){
 		switched = false;
 		origin = findMostConflicts(g, &max);
-		
 		if(origin == -1)
 		{
-			break;
+			max = 9999;
+			origin = 0;
+			dest = 1;
+			continue;
 		}
 
 		findNextEdge(g, &origin, &dest);
@@ -374,7 +378,7 @@ int findMostConflicts(graph* g, int* max)
 		//Set the new value to one with the most conflicts
 		//  Which ALSO isn't the same as the previous value with the same # of conflicts
 		//  Essentially cascade downwards from cycles
-		if(conflicts > maxConflicts && (conflicts < *max))
+		if(conflicts > maxConflicts)
 		{
 			result = i;
 			maxConflicts = conflicts;
@@ -393,13 +397,12 @@ int findMostConflicts(graph* g, int* max)
  */
 bool randomSolution(graph* g, int numColors)
 {
-	graph result(*g);
 	for(int c = 0; c < g->numNodes(); c++)
 	{
-		result.getNode(c).setWeight(rand() % numColors);
+		g->getNode(c).setWeight(rand() % numColors);
 	}
 	
-	return checkColored(&result); //When the Angels win the pennant...
+	return checkColored(g); //When the Angels win the pennant...
 }
 
 bool recolorNodes(graph* g, int origin, int dest, int tri, int numColors)
